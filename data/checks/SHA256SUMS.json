@@ -1,0 +1,6 @@
+{
+  "data/manifests/full_frame_manifest.csv": "41afe2cb3181a598810df0ae20fbdb15d281380e8f6bd1cf0c60b64af990b631",
+  "splits/train_ids.txt": "3b1b3f86db61fdc4a9d50cb0bf0c824f6ce1efdeadaa5e74be2c3510fe1bc2c4",
+  "splits/val_ids.txt": "ee56ebc069172255687a98a714f55a200e69716676278cf2a20952eb5b011304",
+  "splits/test_ids.txt": "e476f1281378cacc66f03330f31ece3d089287ab1689fd7bd5b271765dfdd722"
+}

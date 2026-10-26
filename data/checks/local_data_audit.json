@@ -1,0 +1,38 @@
+{
+  "check_date": "2026-10-26",
+  "image_count": 140662,
+  "image_bytes": 33752277043,
+  "manifest_rows": 140662,
+  "split_image_counts": {
+    "train": 102087,
+    "test": 20686,
+    "val": 17889
+  },
+  "split_manifest_dish_counts": {
+    "train": 3340,
+    "val": 589,
+    "test": 676
+  },
+  "split_id_counts": {
+    "train": 3340,
+    "val": 589,
+    "test": 676
+  },
+  "split_overlap": {
+    "train_val": 0,
+    "train_test": 0,
+    "val_test": 0
+  },
+  "missing_images": 0,
+  "duplicate_manifest_paths": 0,
+  "split_mismatch_rows": 0,
+  "unlisted_images": 0,
+  "ids_without_manifest": {
+    "train": 0,
+    "val": 0,
+    "test": 0
+  },
+  "dishes_with_4x_protein_exceeding_calories": 4403,
+  "label_status": "Unverified; possible column mapping issue. Original values unchanged.",
+  "limitations": "Does not establish official split provenance, decode images, check duplicate image content, or verify labels against source metadata."
+}
