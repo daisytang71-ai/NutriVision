@@ -4,7 +4,7 @@ Single-image nutritional estimation via transfer learning. 从单张 RGB 食物�
 
 ## 当前状态
 
-已实现并用人工构造数据核对统一评估程序。正式数据划分、模型训练和真实实验结果由各负责人确认后更新；本仓库框架不表示这些工作已经完成。
+已实现并用人工构造数据核对统一评估程序。正式数据划分、模型训练和真实实验结果由各负责人确认后更新。
 
 ## 目录与分工
 
@@ -14,10 +14,10 @@ NutriVision/
 ├── data/                    # 数据说明；原始数据不上传
 ├── splits/                  # 固定菜品划分清单与版本说明
 ├── src/
-│   ├── data/                # 数据读取、预处理、划分检查（Member A）
-│   ├── models/              # Custom CNN（B）、ResNet18/MobileNetV2（C）
-│   ├── training/            # 训练入口与验证过程（B、C）
-│   └── evaluation/          # 指标计算、均值基线及误差分析（D）
+│   ├── data/                # 数据读取、预处理、划分检查
+│   ├── models/              # Custom CNN、ResNet18/MobileNetV2
+│   ├── training/            # 训练入口与验证过程
+│   └── evaluation/          # 指标计算、均值基线及误差分析
 ├── predictions/             # 各模型验证集预测 CSV
 ├── results/
 │   ├── metrics/             # 指标表
