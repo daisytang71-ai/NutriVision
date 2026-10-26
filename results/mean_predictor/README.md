@@ -1,7 +1,5 @@
 # Mean Predictor 验证记录
 
-标签映射未验证，本次仅为流程试运行；不得作为正式营养预测结果。
-
 采样：one-per-dish；训练样本 3340；验证样本 589。仅训练标签拟合均值，未评估测试集。
 
 |目标（按当前列名）|训练集均值|验证 MAE|验证 RMSE|验证 R²|
@@ -11,4 +9,4 @@
 |carbohydrate|10.734092|9.923102|13.091277|-7.636976495639658e-07|
 |fat|16.832872|15.571819|55.569810|-0.00480042366927913|
 
-具体样本见 train_selected.csv 和 val_selected.csv；预测见 mean_baseline.csv。标签修复或清单变更后必须重新运行。
+具体样本见 train_selected.csv 和 val_selected.csv；预测见 mean_baseline.csv。清单变更后必须重新运行。

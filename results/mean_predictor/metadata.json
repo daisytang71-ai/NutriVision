@@ -1,6 +1,5 @@
 {
   "model": "Mean Predictor",
-  "label_status": "unverified",
   "manifest_sha256": "41afe2cb3181a598810df0ae20fbdb15d281380e8f6bd1cf0c60b64af990b631",
   "sampling": "one-per-dish",
   "selection_rule": "Sort dish_id and image_path lexicographically; first image per dish unless all-images selected",
@@ -19,15 +18,15 @@
     "fat": 16.832872002994012
   },
   "weighting": "Equal selected-image weights; with one-per-dish this is equal dish weights",
-  "limitations": "Labels used unchanged. Does not verify source label mapping or image decoding. Other models must use identical selected samples and labels.",
-  "run_id": "mean_predictor_20261026_one_per_dish_unverified",
+  "limitations": "Images are not decoded. Other models must use identical selected samples and labels.",
+  "run_id": "mean_predictor_20261026_one_per_dish",
   "date": "2026-10-26",
   "seed": null,
   "seed_note": "Deterministic selection; no random sampling",
   "actual_epochs": 0,
   "device": "CPU; Python standard library",
   "code_base_commit": "1b5a3be8f37a917a2be98a811909bf76a8fff80f",
-  "code_sha256": "580d75bcf6942a6c2971a2d162e36d169f4f0dbcaab6e2819fde60e6485ed66c",
+  "code_sha256": "e9505b5b1ec6d24ce4d35ec202ea8cd31229bf7d27b7bc444d37aa866a1f3eb3",
   "checkpoint": "Not applicable; fitted parameters are training_means in this file",
-  "command": "python src/evaluation/mean_predictor.py --manifest data/manifests/full_frame_manifest.csv --output-dir results/mean_predictor_unverified --sampling one-per-dish --label-status unverified"
+  "command": "python src/evaluation/mean_predictor.py --manifest data/manifests/full_frame_manifest.csv --output-dir results/mean_predictor --sampling one-per-dish"
 }

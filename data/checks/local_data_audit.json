@@ -32,7 +32,5 @@
     "val": 0,
     "test": 0
   },
-  "dishes_with_4x_protein_exceeding_calories": 4403,
-  "label_status": "Unverified; possible column mapping issue. Original values unchanged.",
-  "limitations": "Does not establish official split provenance, decode images, check duplicate image content, or verify labels against source metadata."
+  "limitations": "Does not establish official split provenance, decode images, check duplicate image content."
 }

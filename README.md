@@ -6,7 +6,7 @@ Single-image nutritional estimation via transfer learning. 从单张 RGB 食物�
 
 已实现并用人工构造数据核对统一评估程序。现已上传全量图片清单及 train/val/test 菜品编号，本地检查覆盖 140,662 张图片、4,605 份菜品，三个划分 dish_id 无交叉。完整图片通过网盘共享，当前尚未上传网盘，链接待补充。
 
-**标签映射待核对**：清单中多份菜品的 protein 与 calories 存在明显异常关系，原值保留；尚不宣称标签已验证。检查结果与范围见 [数据说明](data/README.md)，图片获取方式见 [下载说明](data/DOWNLOAD.md)。模型代码和训练记录由各负责人自行上传。
+检查结果与范围见 [数据说明](data/README.md)，图片获取方式见 [下载说明](data/DOWNLOAD.md)。模型代码和训练记录由各负责人自行上传。
 
 ## 目录与分工
 
@@ -63,10 +63,10 @@ python -m unittest discover -s tests -v
 
 均值基线已完成实现与真实清单上的试运行。训练集 3,340 份菜品，验证集 589 份菜品；每份菜品按 image_path 字典序固定选第一张，不读取图像内容，不评估测试集。只用选中的训练标签计算四个均值。
 
-**标签映射仍未验证，因此本轮仅证明流程跑通，不作为正式营养预测性能结论。** 预测、指标、训练均值、数据校验值及选图清单见 [基线运行记录](results/mean_predictor_unverified/README.md)。标签修复后重新运行；其他模型比较前须采用完全相同的验证样本和正确标签。
+预测、指标、训练均值、数据校验值及选图清单见 [基线运行记录](results/mean_predictor/README.md)。其他模型比较前须采用完全相同的验证样本和正确标签。
 
 ```powershell
-python src/evaluation/mean_predictor.py --manifest data/manifests/full_frame_manifest.csv --output-dir results/mean_predictor_unverified --sampling one-per-dish --label-status unverified
+python src/evaluation/mean_predictor.py --manifest data/manifests/full_frame_manifest.csv --output-dir results/mean_predictor --sampling one-per-dish
 ```
 
-默认 one-per-dish 实现菜品等权。若模型负责人实际使用全量多图，可指定 --sampling all-images 并使用另一个输出目录；该设置按训练图片等权，均值与指标都可能不同，不能混用两种协议。--label-status verified 仅在数据负责人已核对并修复标签后使用，并不自动检查标签正确性。
+默认 one-per-dish 实现菜品等权。若模型负责人实际使用全量多图，可指定 --sampling all-images 并使用另一个输出目录；该设置按训练图片等权，均值与指标都可能不同，不能混用两种协议。

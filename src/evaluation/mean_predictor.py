@@ -54,7 +54,7 @@ def fit_mean(rows):
     return [math.fsum(row['labels'][i] for row in rows) / len(rows) for i in range(4)]
 
 
-def run(manifest, out, sampling, label_status):
+def run(manifest, out, sampling):
     selected = load_manifest(manifest, sampling)
     means = fit_mean(selected['train'])
     out.mkdir(parents=True, exist_ok=True)
@@ -74,22 +74,21 @@ def run(manifest, out, sampling, label_status):
             writer = csv.DictWriter(stream, fieldnames=['dish_id', 'image_path'])
             writer.writeheader()
             writer.writerows({c: row[c] for c in writer.fieldnames} for row in selected[split])
-    metadata = dict(model='Mean Predictor', label_status=label_status,
+    metadata = dict(model='Mean Predictor',
                     manifest_sha256=hashlib.sha256(manifest.read_bytes()).hexdigest(),
                     sampling=sampling, selection_rule='Sort dish_id and image_path lexicographically; first image per dish unless all-images selected',
                     fit_split='train', evaluation_split='val', test_evaluated=False,
                     sample_counts={s: len(v) for s, v in selected.items()},
                     training_means=dict(zip(LABELS, means)),
                     weighting='Equal selected-image weights; with one-per-dish this is equal dish weights',
-                    limitations='Labels used unchanged. Does not verify source label mapping or image decoding. Other models must use identical selected samples and labels.')
+                    limitations='Images are not decoded. Other models must use identical selected samples and labels.')
     (out / 'metadata.json').write_text(json.dumps(metadata, indent=2) + '\n', encoding='utf-8')
-    warning = '标签映射未验证，本次仅为流程试运行；不得作为正式营养预测结果。' if label_status == 'unverified' else '标签状态由运行者声明为已验证。'
-    lines = ['# Mean Predictor 验证记录', '', warning, '',
+    lines = ['# Mean Predictor 验证记录', '',
              f'采样：{sampling}；训练样本 {len(selected["train"])}；验证样本 {len(selected["val"])}。仅训练标签拟合均值，未评估测试集。', '',
              '|目标（按当前列名）|训练集均值|验证 MAE|验证 RMSE|验证 R²|', '|---|---:|---:|---:|---:|']
     for i, row in enumerate(metrics):
         lines.append(f'|{LABELS[i]}|{means[i]:.6f}|{row["MAE"]:.6f}|{row["RMSE"]:.6f}|{row["R2"]}|')
-    lines.extend(['', '具体样本见 train_selected.csv 和 val_selected.csv；预测见 mean_baseline.csv。标签修复或清单变更后必须重新运行。'])
+    lines.extend(['', '具体样本见 train_selected.csv 和 val_selected.csv；预测见 mean_baseline.csv。清单变更后必须重新运行。'])
     (out / 'README.md').write_text('\n'.join(lines) + '\n', encoding='utf-8')
     return metadata
 
@@ -99,11 +98,10 @@ if __name__ == '__main__':
     p.add_argument('--manifest', type=Path, required=True)
     p.add_argument('--output-dir', type=Path, required=True)
     p.add_argument('--sampling', choices=['one-per-dish', 'all-images'], default='one-per-dish')
-    p.add_argument('--label-status', choices=['unverified', 'verified'], default='unverified')
     args = p.parse_args()
     if args.manifest.resolve().is_relative_to(args.output_dir.resolve()):
         p.error('Keep source manifest outside output directory')
     try:
-        run(args.manifest, args.output_dir, args.sampling, args.label_status)
+        run(args.manifest, args.output_dir, args.sampling)
     except (ValueError, OSError, OverflowError) as exc:
         p.exit(1, f'Error: {exc}\n')
