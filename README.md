@@ -1,100 +1,35 @@
-# NutriVision
+# Nutrition5k pretrained-model project
 
-Single-image nutritional estimation via transfer learning. 从单张 RGB 食物图像预测热量、蛋白质、碳水化合物和脂肪，比较从零训练的 CNN 与预训练模型。
+Implements ResNet18 and MobileNetV2 for four-target regression from extracted JPG frames.
 
-## 当前状态
+## Manifest
+Required columns:
+`dish_id,camera,frame_idx,image_path,calories,protein,carbohydrate,fat,split`
 
-已实现并用人工构造数据核对统一评估程序。现已上传全量图片清单及 train/val/test 菜品编号，本地检查覆盖 140,662 张图片、4,605 份菜品，三个划分 dish_id 无交叉。完整图片通过网盘共享，当前尚未上传网盘，链接待补充。
+`split` must use `train`, `val`/`valid`/`validation`, or `test`. All frames from a dish must belong to the same split. The script checks for dish leakage, missing image paths, and inconsistent nutrition labels across frames.
 
-检查结果与范围见 [数据说明](data/README.md)，图片获取方式见 [下载说明](data/DOWNLOAD.md)。模型代码和训练记录由各负责人自行上传。
+## Configure and run
+1. Install packages: `pip install -r requirements.txt`
+2. Edit `configs/resnet18.yaml` and `configs/mobilenetv2.yaml`, especially `data.manifest`, optional `data.image_root`, and `output_dir`.
+3. Run:
+   `python train.py --config configs/resnet18.yaml`
+   `python train.py --config configs/mobilenetv2.yaml`
+4. Optional synthetic pipeline test (not real performance):
+   `python train.py --config configs/resnet18.yaml --dummy`
 
-## 目录与分工
+Use forward slashes in Windows YAML paths, e.g. `D:/Nutrition5k/manifest.csv`.
 
-```text
-NutriVision/
-├── configs/                 # 实际训练配置与环境记录
-├── data/                    # 数据说明；原始数据不上传
-├── splits/                  # 固定菜品划分清单与版本说明
-├── src/
-│   ├── data/                # 数据读取、预处理、划分检查
-│   ├── models/              # Custom CNN、ResNet18/MobileNetV2
-│   ├── training/            # 训练入口与验证过程
-│   └── evaluation/          # 指标计算、均值基线及误差分析
-├── predictions/             # 各模型验证集预测 CSV
-├── results/
-│   ├── metrics/             # 指标表
-│   └── figures/             # 散点图、曲线与误差案例
-├── reports/                 # 一页进展报告、PPT 和最终报告
-├── docs/                    # 接口约定、协作说明
-├── tests/                   # 评估程序检查
-└── requirements.txt         # 当前已实现功能的依赖说明
-```
+## Method
+- RGB, direct resize to 224×224 (no crop).
+- Train augmentation: random horizontal flip, random rotation (±10°), random brightness jitter.
+- Validation/test: resize and ImageNet normalization only, no random augmentation.
+- Labels standardized using the unique training dishes' mean/std.
+- Loss: mean MSE across batch and all four standardized targets.
+- Stage 1 trains the regression head; Stage 2 fine-tunes later backbone layers with a lower backbone learning rate.
+- Every frame is predicted independently. Frame predictions are averaged per `dish_id` for dish-level metrics.
+- Checkpoint selection uses validation **dish-level calorie MAE (kcal)**. Test is used only for final evaluation.
+- Reports MAE, RMSE and R² for calories (kcal), protein, carbohydrate and fat (grams).
 
-## 快速开始
+Outputs: `metrics.csv`, `best_model.pt`, stage checkpoints, frame/dish prediction CSVs, `final_metrics.json`, and `run_config.json`.
 
-当前评估程序仅需 Python 3.10 或更新版本，无需安装第三方包。以下命令从仓库根目录执行，预测文件需由实际运行产生。
-
-```powershell
-python src/evaluation/evaluate.py predictions/cnn.csv --output results/metrics/cnn_metrics.csv
-python src/evaluation/evaluate.py predictions/mean_baseline.csv predictions/cnn.csv predictions/resnet18.csv --output results/metrics/comparison.csv
-python -m unittest discover -s tests -v
-```
-
-多文件评估要求样本及真实标签一致，允许行顺序不同。指标逐目标输出 MAE、RMSE、R²；以热量 MAE 为主指标。完整格式见 [预测接口](docs/prediction_format.md)。
-
-## 数据与实验协议
-
-使用 Nutrition5k RGB 图像和营养标签；实际下载范围、数据来源、筛选规则与样本统计由数据负责人补充到 data/README.md。遵循官方菜品级 train/test 划分，仅从训练菜品划出验证集。同一菜品不得跨集合。
-
-本阶段优先 Mean Predictor、Custom CNN 与 ResNet18；MobileNetV2 和交互演示为后续范围。均值基线仅用训练集四个标签的均值。模型使用相同验证集；目标标准化参数仅从训练集计算，导出预测前恢复 kcal/g。
-
-每次实验记录 run_id、代码 commit、数据与划分版本、随机种子、实际配置、设备、轮数、预训练来源、checkpoint、日志和预测路径。没有真实结果时明确记录状态，不填示例分数。
-
-## 团队协作
-
-- Member A：蔡雨静，数据准备、划分与检查。
-- Member B：曹可昕，Custom CNN 与训练。
-- Member C：滕姝慧，预训练模型微调。
-- Member D：汤远航，统一评估、可视化、复现与材料整合。
-
-各成员在自己的分支提交，通过 Pull Request 合并；提交前阅读 [协作说明](docs/contributing.md)。原始图像、完整数据包、权重、缓存、密钥与本机环境文件不提交。评估代码可独立使用；训练依赖由模型成员按实际验证环境补充，当前不宣称训练流程可复现。
-
-## Mean Predictor 当前进度
-
-均值基线已完成实现与真实清单上的试运行。训练集 3,340 份菜品，验证集 589 份菜品；每份菜品按 image_path 字典序固定选第一张，不读取图像内容，不评估测试集。只用选中的训练标签计算四个均值。
-
-预测、指标、训练均值、数据校验值及选图清单见 [基线运行记录](results/mean_predictor/README.md)。其他模型比较前须采用完全相同的验证样本和正确标签。
-
-```powershell
-python src/evaluation/mean_predictor.py --manifest data/manifests/full_frame_manifest.csv --output-dir results/mean_predictor --sampling one-per-dish
-```
-
-默认 one-per-dish 实现菜品等权。若模型负责人实际使用全量多图，可指定 --sampling all-images 并使用另一个输出目录；该设置按训练图片等权，均值与指标都可能不同，不能混用两种协议。
-
-### 2026-10-26 数据与基线更新
-
-仓库清单已替换为新提供的 corrected REVIEW 版本，路径保持 data/manifests/full_frame_manifest.csv。Mean Predictor 的预测、四维指标与运行记录已全部重算；请使用当前结果，历史提交中的旧宏量营养指标不再适用。
-
-|验证目标|MAE|RMSE|单位|
-|---|---:|---:|---|
-|热量|169.8495|277.3685|kcal|
-|蛋白质|13.3104|17.1320|g|
-|碳水化合物|15.5718|55.5698|g|
-|脂肪|9.9231|13.0913|g|
-
-选图规则和 train/val/test 菜品编号未变；仍只用训练集拟合均值并评估验证集。统一指标入口为 src/evaluation/evaluate.py。其他模型预测与本基线对比前应对齐菜品、图像、标签与聚合方式。
-
-## CNN 独立测试结果
-
-已对队友提供的最佳权重（epoch 9）完成测试集推理：20,686 张图片、676 份菜品。使用训练代码对应的预处理、checkpoint 内归一化参数，最终指标由本项目 src/evaluation/evaluate.py 统一计算；未采用队友的独立指标程序。
-
-|测试目标|CNN 菜品级 MAE|同测试集均值基线 MAE|单位|
-|---|---:|---:|---|
-|热量|95.4759|188.3427|kcal|
-|蛋白质|7.2610|14.3273|g|
-|碳水化合物|10.3923|14.2530|g|
-|脂肪|8.1650|12.4354|g|
-
-同一菜品全部图片的预测先取平均，再按菜品等权评分。热量 MAE 相对均值基线下降约 49.3%。图片级结果单独保存，不与菜品级指标混用。本次不根据测试结果调参或选择 checkpoint。
-
-[完整结果、预测与散点图](results/cnn_test/README.md) · [测试运行说明与清单兼容性记录](docs/cnn_testing.md)。当前清单与 checkpoint 内训练清单哈希不同，已核对当前菜品划分及训练均值/标准差相符；两个哈希和检查范围在运行记录中保留。
+The code has been prepared from the stated manifest schema; update paths and verify the actual split names/label units before training. Dummy-mode results must not be used as experimental results.
