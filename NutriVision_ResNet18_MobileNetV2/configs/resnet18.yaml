@@ -1,0 +1,30 @@
+seed: 42
+model:
+  name: resnet18
+  pretrained: true
+  weights: IMAGENET1K_V1
+  image_size: 224
+data:
+  manifest: "./full_frame_manifest_corrected_REVIEW.csv"
+  image_root: "./side_frames_valid"
+  image_path_col: image_path
+  dish_id_col: dish_id
+  split_col: split
+  target_cols: [calories, protein, carbohydrate, fat]
+  batch_size: 32
+  num_workers: 0
+augmentation:
+  horizontal_flip_p: 0.5
+  rotation_degrees: 10
+  brightness: 0.15
+training:
+  stage1_epochs: 15
+  stage2_epochs: 30
+  stage1_head_lr: 0.001
+  stage2_backbone_lr: 0.00001
+  stage2_head_lr: 0.0001
+  weight_decay: 0.0001
+  patience: 7
+  min_delta: 0.0
+  use_amp: true
+output_dir: "outputs/resnet18"
