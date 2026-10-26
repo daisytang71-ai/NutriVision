@@ -58,3 +58,15 @@ python -m unittest discover -s tests -v
 - Member D：汤远航，统一评估、可视化、复现与材料整合。
 
 各成员在自己的分支提交，通过 Pull Request 合并；提交前阅读 [协作说明](docs/contributing.md)。原始图像、完整数据包、权重、缓存、密钥与本机环境文件不提交。评估代码可独立使用；训练依赖由模型成员按实际验证环境补充，当前不宣称训练流程可复现。
+
+## Mean Predictor 当前进度
+
+均值基线已完成实现与真实清单上的试运行。训练集 3,340 份菜品，验证集 589 份菜品；每份菜品按 image_path 字典序固定选第一张，不读取图像内容，不评估测试集。只用选中的训练标签计算四个均值。
+
+**标签映射仍未验证，因此本轮仅证明流程跑通，不作为正式营养预测性能结论。** 预测、指标、训练均值、数据校验值及选图清单见 [基线运行记录](results/mean_predictor_unverified/README.md)。标签修复后重新运行；其他模型比较前须采用完全相同的验证样本和正确标签。
+
+```powershell
+python src/evaluation/mean_predictor.py --manifest data/manifests/full_frame_manifest.csv --output-dir results/mean_predictor_unverified --sampling one-per-dish --label-status unverified
+```
+
+默认 one-per-dish 实现菜品等权。若模型负责人实际使用全量多图，可指定 --sampling all-images 并使用另一个输出目录；该设置按训练图片等权，均值与指标都可能不同，不能混用两种协议。--label-status verified 仅在数据负责人已核对并修复标签后使用，并不自动检查标签正确性。
