@@ -1,0 +1,27 @@
+{
+  "split": "test",
+  "checkpoint_epoch": 9,
+  "manifest_sha256": "d7877ab30607ebdfaec8ecbaab273679e15677c8257e45ab52b393c0a1b59fab",
+  "checkpoint_manifest_sha256": "b4dddcc5db249730bca9a31f2b0465248bf04261712395b01cb4b7188dc72e32",
+  "manifest_check": "split IDs and training moments; hashes differ",
+  "checkpoint_sha256": "6f5b2da11b8e47788ba4fae32ddc4c86200766b7b978a9977dc9ed347eeffe27",
+  "images": 20686,
+  "dishes": 676,
+  "device": "cpu",
+  "torch": "2.14.1+cpu",
+  "evaluation_script": "src/evaluation/evaluate.py",
+  "aggregation": "Unclipped predictions averaged across all available images of each dish",
+  "baseline": "Training-dish means saved in checkpoint; not fitted on evaluation labels",
+  "targets": [
+    "calories",
+    "protein",
+    "carbohydrate",
+    "fat"
+  ],
+  "code_commit_before_test": "b4af08ad2e4fa41782e33ba80721239f588bd01f",
+  "inference_code_sha256": "b5fcea7aecf17b619b0dc5de317c421cad84368b1a70d68a362d1ca7c245a7cb",
+  "evaluator_sha256": "39eeb1e12e969bcdcee317e088a1560bb99dc7030439f3f2dc56397d654efb9c",
+  "run_id": "cnn_test_20261026_epoch9",
+  "manifest_source": "full_frame_manifest_corrected_REVIEW(1).csv",
+  "completion_checks": "All 20686 test image IDs match manifest; 676 dish averages independently verified"
+}

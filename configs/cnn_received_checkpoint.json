@@ -1,0 +1,52 @@
+{
+  "format_version": 1,
+  "label_scaler": {
+    "mean": [
+      214.53172302246094,
+      14.906017303466797,
+      16.83287239074707,
+      10.734091758728027
+    ],
+    "std": [
+      256.4293212890625,
+      18.9844970703125,
+      21.2032527923584,
+      19.43048858642578
+    ],
+    "enabled": true
+  },
+  "config": {
+    "manifest": "../full_frame_manifest_cnn.csv",
+    "data_root": "../side_frames_valid",
+    "out_dir": "runs/cnn_all_images_es7_20261026_145245",
+    "data_kind": "real",
+    "epochs": 50,
+    "batch_size": 32,
+    "image_size": 224,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "dropout": 0.3,
+    "seed": 42,
+    "num_workers": 4,
+    "threads": 4,
+    "device": "cuda",
+    "amp": false,
+    "sampling": "all-images",
+    "log_every": 100,
+    "patience": 7,
+    "no_standardize": false,
+    "no_augment": false,
+    "resume": null
+  },
+  "manifest_sha256": "b4dddcc5db249730bca9a31f2b0465248bf04261712395b01cb4b7188dc72e32",
+  "train_mean": [
+    214.5317239290419,
+    14.906017035928178,
+    16.83287200299398,
+    10.734092005089796
+  ],
+  "epoch": 9,
+  "checkpoint_sha256": "6f5b2da11b8e47788ba4fae32ddc4c86200766b7b978a9977dc9ed347eeffe27",
+  "source": "NutriVision_CNN.zip/best.pt",
+  "notes": "Configuration copied from supplied checkpoint; original training file paths may differ on this computer."
+}
