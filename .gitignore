@@ -1,0 +1,31 @@
+# Python and environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+# Secrets and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Raw data and checkpoints
+data/raw/
+data/processed/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.zip
+*.tar
+*.gz
+# Local runs / large logs
+runs/
+wandb/
+*.log

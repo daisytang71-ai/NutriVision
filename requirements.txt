@@ -1,0 +1,2 @@
+# Current evaluation script uses only the Python standard library.
+# Training owners should add the exact dependencies tested in their environment.

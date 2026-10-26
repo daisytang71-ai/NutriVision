@@ -1,0 +1,16 @@
+{
+  "status": "template_not_an_experiment",
+  "run_id": "TO_FILL",
+  "model": "TO_FILL",
+  "code_commit": "TO_FILL",
+  "data_version": "TO_FILL",
+  "split_version": "TO_FILL",
+  "seed": null,
+  "actual_epochs": null,
+  "device": "TO_FILL",
+  "pretrained_source": "TO_FILL",
+  "config_path": "TO_FILL",
+  "checkpoint_location": "TO_FILL",
+  "log_location": "TO_FILL",
+  "prediction_file": "TO_FILL"
+}
