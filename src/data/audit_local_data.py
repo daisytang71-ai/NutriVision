@@ -6,7 +6,7 @@ from pathlib import Path
 from collections import Counter
 
 
-def audit(root):
+def audit(root, manifest=None):
     splits = {s: set((root / (s + '_ids.txt')).read_text(encoding='utf-8-sig').split()) for s in ('train', 'val', 'test')}
     images = list((root / 'side_frames_valid').rglob('*.jpg'))
     actual = {p.relative_to(root / 'side_frames_valid').as_posix() for p in images}
@@ -14,7 +14,7 @@ def audit(root):
     dishes = {s: set() for s in splits}
     counts = Counter()
     missing = duplicate = mismatch = 0
-    with (root / 'full_frame_manifest.csv').open(encoding='utf-8-sig', newline='') as f:
+    with (manifest or root / 'full_frame_manifest.csv').open(encoding='utf-8-sig', newline='') as f:
         for row in csv.DictReader(f):
             dish, split = row['dish_id'], row['split']
             path = row['image_path'].replace('\\', '/')
@@ -38,8 +38,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--data-root', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--manifest', type=Path, help='Explicit manifest; otherwise use data-root/full_frame_manifest.csv')
     args = parser.parse_args()
-    result = audit(args.data_root)
+    result = audit(args.data_root, args.manifest)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result, indent=2))

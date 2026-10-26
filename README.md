@@ -70,3 +70,16 @@ python src/evaluation/mean_predictor.py --manifest data/manifests/full_frame_man
 ```
 
 默认 one-per-dish 实现菜品等权。若模型负责人实际使用全量多图，可指定 --sampling all-images 并使用另一个输出目录；该设置按训练图片等权，均值与指标都可能不同，不能混用两种协议。
+
+### 2026-10-26 数据与基线更新
+
+仓库清单已替换为新提供的 corrected REVIEW 版本，路径保持 data/manifests/full_frame_manifest.csv。Mean Predictor 的预测、四维指标与运行记录已全部重算；请使用当前结果，历史提交中的旧宏量营养指标不再适用。
+
+|验证目标|MAE|RMSE|单位|
+|---|---:|---:|---|
+|热量|169.8495|277.3685|kcal|
+|蛋白质|13.3104|17.1320|g|
+|碳水化合物|15.5718|55.5698|g|
+|脂肪|9.9231|13.0913|g|
+
+选图规则和 train/val/test 菜品编号未变；仍只用训练集拟合均值并评估验证集。统一指标入口为 src/evaluation/evaluate.py。其他模型预测与本基线对比前应对齐菜品、图像、标签与聚合方式。

@@ -1,6 +1,6 @@
 {
   "model": "Mean Predictor",
-  "manifest_sha256": "41afe2cb3181a598810df0ae20fbdb15d281380e8f6bd1cf0c60b64af990b631",
+  "manifest_sha256": "d7877ab30607ebdfaec8ecbaab273679e15677c8257e45ab52b393c0a1b59fab",
   "sampling": "one-per-dish",
   "selection_rule": "Sort dish_id and image_path lexicographically; first image per dish unless all-images selected",
   "fit_split": "train",
@@ -13,20 +13,20 @@
   },
   "training_means": {
     "calories": 214.5317239290419,
-    "protein": 185.0700598802395,
-    "carbohydrate": 10.734092005089819,
-    "fat": 16.832872002994012
+    "protein": 14.906017035928143,
+    "carbohydrate": 16.832872002994012,
+    "fat": 10.734092005089819
   },
   "weighting": "Equal selected-image weights; with one-per-dish this is equal dish weights",
   "limitations": "Images are not decoded. Other models must use identical selected samples and labels.",
-  "run_id": "mean_predictor_20261026_one_per_dish",
+  "run_id": "mean_predictor_20261026_corrected_one_per_dish",
   "date": "2026-10-26",
   "seed": null,
   "seed_note": "Deterministic selection; no random sampling",
   "actual_epochs": 0,
   "device": "CPU; Python standard library",
-  "code_base_commit": "1b5a3be8f37a917a2be98a811909bf76a8fff80f",
+  "code_base_commit": "df8e05670cb9142ca9559a88497bf33b2a4d87b5",
   "code_sha256": "e9505b5b1ec6d24ce4d35ec202ea8cd31229bf7d27b7bc444d37aa866a1f3eb3",
-  "checkpoint": "Not applicable; fitted parameters are training_means in this file",
+  "manifest_source": "full_frame_manifest_corrected_REVIEW(1).csv",
   "command": "python src/evaluation/mean_predictor.py --manifest data/manifests/full_frame_manifest.csv --output-dir results/mean_predictor --sampling one-per-dish"
 }

@@ -32,5 +32,6 @@
     "val": 0,
     "test": 0
   },
-  "limitations": "Does not establish official split provenance, decode images, check duplicate image content."
+  "limitations": "Does not establish official split provenance, decode images, check duplicate image content.",
+  "manifest_sha256": "d7877ab30607ebdfaec8ecbaab273679e15677c8257e45ab52b393c0a1b59fab"
 }

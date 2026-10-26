@@ -33,7 +33,13 @@
 ## 重跑本地核对
 
 ```powershell
-python src/data/audit_local_data.py --data-root D:/MLData --output data/checks/local_data_audit.json
+python src/data/audit_local_data.py --data-root D:/MLData --manifest data/manifests/full_frame_manifest.csv --output data/checks/local_data_audit.json
 ```
 
 数据处理和模型代码由各成员自行上传到 src/ 对应目录。原始数据来源、许可要求、筛选规则与官方划分出处仍待数据负责人补充。
+
+## 当前清单版本
+
+2026-10-26 使用用户新提供的 full_frame_manifest_corrected_REVIEW(1).csv 替换旧清单，仓库内统一命名仍为 full_frame_manifest.csv。SHA-256 为 d7877ab30607ebdfaec8ecbaab273679e15677c8257e45ab52b393c0a1b59fab。
+
+菜品编号、图片路径和 split 保持不变，营养标签按新文件更新。Mean Predictor 已基于此版本重新运行。D:/MLData 中的旧清单未被自动覆盖；请使用仓库清单，或手动替换本地旧副本。下载包也应采用当前版本。
