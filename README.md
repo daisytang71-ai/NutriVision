@@ -101,7 +101,7 @@ The CNN source code is under [`nutrivision_cnn/nutrivision`](nutrivision_cnn/nut
 The supplied pinned CNN requirements were tested with Python 3.12. For an existing GPU environment, retain a CUDA-compatible PyTorch installation and check the dependencies before changing it.
 
 ```bash
-cd nutrivision_cnn
+cd src/models/nutrivision_cnn
 python3 -m pip install -r requirements.txt
 ```
 
