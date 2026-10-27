@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nutrivision_cnn'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'models' / 'nutrivision_cnn'))
 from nutrivision.model import CustomCNN
 from nutrivision.data import LabelScaler, NutritionDataset, load_manifest
 from evaluate import evaluate
