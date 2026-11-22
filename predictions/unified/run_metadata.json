@@ -1,0 +1,57 @@
+[
+  {
+    "model": "MeanPredictor",
+    "frames": 20686,
+    "dishes": 676,
+    "seconds": 0.0,
+    "selection": "non-learning baseline; training-dish means only"
+  },
+  {
+    "model": "CustomCNN",
+    "frames": 20686,
+    "dishes": 676,
+    "seconds": 355.9,
+    "epoch": 9,
+    "selection": "validation dish-level calorie MAE (early stopping)"
+  },
+  {
+    "model": "ResNet18_baseline",
+    "frames": 20686,
+    "dishes": 676,
+    "seconds": 473.3,
+    "stage": 1,
+    "epoch": 4,
+    "val_dish_calories_MAE_kcal": 91.38261413574219,
+    "selection": "validation dish-level calorie MAE"
+  },
+  {
+    "model": "ResNet18_finetune",
+    "frames": 20686,
+    "dishes": 676,
+    "seconds": 494.3,
+    "stage": 2,
+    "epoch": 26,
+    "val_dish_calories_MAE_kcal": 56.538719177246094,
+    "selection": "validation dish-level calorie MAE"
+  },
+  {
+    "model": "MobileNetV2_baseline",
+    "frames": 20686,
+    "dishes": 676,
+    "seconds": 391.4,
+    "stage": 1,
+    "epoch": 12,
+    "val_dish_calories_MAE_kcal": 88.58164978027344,
+    "selection": "validation dish-level calorie MAE"
+  },
+  {
+    "model": "MobileNetV2_finetune",
+    "frames": 20686,
+    "dishes": 676,
+    "seconds": 400.6,
+    "stage": 2,
+    "epoch": 28,
+    "val_dish_calories_MAE_kcal": 59.32685852050781,
+    "selection": "validation dish-level calorie MAE"
+  }
+]
