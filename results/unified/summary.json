@@ -1,0 +1,122 @@
+{
+  "n_test_dishes": 676,
+  "n_test_frames": 20686,
+  "models": [
+    "MeanPredictor",
+    "CustomCNN",
+    "ResNet18_baseline",
+    "ResNet18_finetune",
+    "MobileNetV2_baseline",
+    "MobileNetV2_finetune"
+  ],
+  "primary_metric": "Calorie MAE (single-frame, dish-balanced)",
+  "secondary_metrics": [
+    "Protein MAE",
+    "Carbs MAE",
+    "Fat MAE"
+  ],
+  "checkpoint_selection": "validation dish-level calorie MAE; no test-set selection",
+  "error_analysis_model": "ResNet18_finetune",
+  "error_analysis_model_selection_basis": "lowest validation dish-level calorie MAE",
+  "predicted_vs_actual": {
+    "slope": 0.12249672938709098,
+    "intercept": 183.0284690296506,
+    "pearson_r": 0.3973208787306448,
+    "regular_subset": {
+      "slope": 0.7668100966159418,
+      "intercept": 42.5033077462332,
+      "pearson_r": 0.9260064690765112,
+      "cutoff_kcal": 900,
+      "n_dishes": 665
+    }
+  },
+  "extreme_labels": {
+    "cutoff_kcal": 900,
+    "n_dishes_above": 11,
+    "max_true_calories": 9485.8154296875,
+    "note": "Two dishes have true calories >9,000 kcal (9,486 / 9,170); they dominate RMSE/R2 for every model and are impossible to predict from images given the training-label range."
+  },
+  "robust_subset": {
+    "MeanPredictor": {
+      "MAE": 188.3427,
+      "RMSE": 537.0863,
+      "R2": -0.0049
+    },
+    "CustomCNN": {
+      "MAE": 95.4759,
+      "RMSE": 504.8389,
+      "R2": 0.1121
+    },
+    "ResNet18_baseline": {
+      "MAE": 109.0333,
+      "RMSE": 510.2608,
+      "R2": 0.093
+    },
+    "ResNet18_finetune": {
+      "MAE": 78.7701,
+      "RMSE": 495.4477,
+      "R2": 0.1449
+    },
+    "MobileNetV2_baseline": {
+      "MAE": 105.3335,
+      "RMSE": 506.7884,
+      "R2": 0.1053
+    },
+    "MobileNetV2_finetune": {
+      "MAE": 76.6107,
+      "RMSE": 483.8755,
+      "R2": 0.1843
+    }
+  },
+  "robust_subset_regular": {
+    "MeanPredictor": {
+      "MAE": 153.9593,
+      "RMSE": 189.231,
+      "R2": -0.0
+    },
+    "CustomCNN": {
+      "MAE": 65.2417,
+      "RMSE": 97.9152,
+      "R2": 0.7323
+    },
+    "ResNet18_baseline": {
+      "MAE": 77.064,
+      "RMSE": 114.7173,
+      "R2": 0.6325
+    },
+    "ResNet18_finetune": {
+      "MAE": 48.9289,
+      "RMSE": 74.1991,
+      "R2": 0.8462
+    },
+    "MobileNetV2_baseline": {
+      "MAE": 73.3239,
+      "RMSE": 106.0577,
+      "R2": 0.6859
+    },
+    "MobileNetV2_finetune": {
+      "MAE": 48.0543,
+      "RMSE": 73.3735,
+      "R2": 0.8497
+    }
+  },
+  "best_primary_calorie_mae_model": "ResNet18 fine-tuned",
+  "mean_predictor_note": "Non-learning baseline predicting training-dish means; included so the comparison covers six models.",
+  "csv_schema": [
+    "dish_id",
+    "frame_path",
+    "true_calories",
+    "pred_calories",
+    "true_protein",
+    "pred_protein",
+    "true_carbs",
+    "pred_carbs",
+    "true_fat",
+    "pred_fat"
+  ],
+  "definitions": {
+    "single_frame_dish_balanced": "MAE=(1/D)sum_i (1/n_i)sum_j |e_ij|; MSE=(1/D)sum_i (1/n_i)sum_j e_ij^2; RMSE=sqrt(MSE); R2=1-MSE/Var(y) with the same dish-balanced weighting.",
+    "dish_level_averaging": "Average all frame predictions per dish, then compute MAE/RMSE/R2 over the 676 dish-level pairs.",
+    "frame_level_reference": "All frames equally weighted; reported only as a contrast because it over-weights dishes with more frames."
+  }
+}

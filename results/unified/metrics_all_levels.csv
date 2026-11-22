@@ -1,0 +1,73 @@
+﻿model,model_label,target,unit,evaluation_level,MAE,RMSE,R2,n_frames,n_dishes
+MeanPredictor,Mean predictor,calories,kcal,primary_single_frame_dish_balanced,188.34271278282253,537.0862877170471,-0.0049195368836041364,20686,676
+MeanPredictor,Mean predictor,calories,kcal,secondary_dish_level_averaging,188.34271278282253,537.0862877170471,-0.0049195368836041364,20686,676
+MeanPredictor,Mean predictor,calories,kcal,reference_frame_level,188.62530802105456,546.9160577258004,-0.005404394486815178,20686,676
+MeanPredictor,Mean predictor,protein,g,primary_single_frame_dish_balanced,14.327252653589271,19.272597705136263,-0.0017263815568206997,20686,676
+MeanPredictor,Mean predictor,protein,g,secondary_dish_level_averaging,14.327252653589271,19.272597705136263,-0.0017263815568206997,20686,676
+MeanPredictor,Mean predictor,protein,g,reference_frame_level,14.411273140814668,19.470122397119617,-0.003396345052083971,20686,676
+MeanPredictor,Mean predictor,carbs,g,primary_single_frame_dish_balanced,14.252988920649825,31.584718722984128,-0.005422271325696837,20686,676
+MeanPredictor,Mean predictor,carbs,g,secondary_dish_level_averaging,14.252988920649825,31.584718722984128,-0.005422271325696837,20686,676
+MeanPredictor,Mean predictor,carbs,g,reference_frame_level,14.347812674821006,32.127593270637085,-0.005404631664575721,20686,676
+MeanPredictor,Mean predictor,fat,g,primary_single_frame_dish_balanced,12.435421815085213,48.34209534962334,-0.0035330728009659307,20686,676
+MeanPredictor,Mean predictor,fat,g,secondary_dish_level_averaging,12.435421815085213,48.34209534962334,-0.0035330728009659307,20686,676
+MeanPredictor,Mean predictor,fat,g,reference_frame_level,12.40775834431847,49.269157905845724,-0.003647260748895098,20686,676
+CustomCNN,Custom CNN,calories,kcal,primary_single_frame_dish_balanced,103.6330221550476,507.3157901039007,0.1033975525054267,20686,676
+CustomCNN,Custom CNN,calories,kcal,secondary_dish_level_averaging,95.47592321616818,504.8388824000995,0.11213128465370792,20686,676
+CustomCNN,Custom CNN,calories,kcal,reference_frame_level,104.96640618028692,518.1151290205852,0.09769788023760595,20686,676
+CustomCNN,Custom CNN,protein,g,primary_single_frame_dish_balanced,7.979587100860023,12.330139078933433,0.5899804631211181,20686,676
+CustomCNN,Custom CNN,protein,g,secondary_dish_level_averaging,7.260999571276241,11.083111746704883,0.6687224357280159,20686,676
+CustomCNN,Custom CNN,protein,g,reference_frame_level,8.11367773950677,12.483784579211381,0.5874964562297968,20686,676
+CustomCNN,Custom CNN,carbs,g,primary_single_frame_dish_balanced,10.656101360680466,30.066320502183757,0.08892309172391188,20686,676
+CustomCNN,Custom CNN,carbs,g,secondary_dish_level_averaging,10.392270280269022,29.9117371152262,0.09826745447762741,20686,676
+CustomCNN,Custom CNN,carbs,g,reference_frame_level,10.726933300330224,30.642208053454432,0.08541387263314115,20686,676
+CustomCNN,Custom CNN,fat,g,primary_single_frame_dish_balanced,8.494474390348508,47.005167247324955,0.0512059476956257,20686,676
+CustomCNN,Custom CNN,fat,g,secondary_dish_level_averaging,8.16496008246886,46.914876505334604,0.05484746398696705,20686,676
+CustomCNN,Custom CNN,fat,g,reference_frame_level,8.592165718913188,47.999549292102486,0.04741191736953676,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),calories,kcal,primary_single_frame_dish_balanced,127.3396779617135,514.4198368782809,0.07811112304321921,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),calories,kcal,secondary_dish_level_averaging,109.0333121347041,510.26079507823533,0.09295765348113016,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),calories,kcal,reference_frame_level,128.13615220645838,524.7658211853076,0.0743847274057915,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),protein,g,primary_single_frame_dish_balanced,10.318339271743772,14.856192159498818,0.40477163813139916,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),protein,g,secondary_dish_level_averaging,9.109554261901051,13.670961997433407,0.4959579696591365,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),protein,g,reference_frame_level,10.428226982322634,15.013486885280544,0.403379337457613,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),carbs,g,primary_single_frame_dish_balanced,10.993553111621178,29.656711027113527,0.1135781658459677,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),carbs,g,secondary_dish_level_averaging,9.622835792542288,29.062236211523746,0.14875900509458395,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),carbs,g,reference_frame_level,11.094124717904977,30.233505164925063,0.10964849546868716,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),fat,g,primary_single_frame_dish_balanced,10.037880502272253,47.19084411746694,0.04369540932398397,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),fat,g,secondary_dish_level_averaging,8.951833037115266,46.97747146284171,0.052323690941967205,20686,676
+ResNet18_baseline,ResNet18 baseline (frozen),fat,g,reference_frame_level,10.07710898577913,48.1555922323111,0.04120826488853846,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,calories,kcal,primary_single_frame_dish_balanced,89.44690623148014,498.0858607882749,0.13572572312104902,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,calories,kcal,secondary_dish_level_averaging,78.77012964643497,495.44766772260806,0.14485701578711718,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,calories,kcal,reference_frame_level,90.88536935824362,508.951399601163,0.12933305682637053,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,protein,g,primary_single_frame_dish_balanced,6.374067328209554,10.518428716014698,0.7016195694414058,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,protein,g,secondary_dish_level_averaging,5.34392614899566,9.35829109562399,0.7638098944010216,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,protein,g,reference_frame_level,6.480074378855041,10.666913517720724,0.6988293125466857,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,carbs,g,primary_single_frame_dish_balanced,8.049856855719524,28.58193757306986,0.17666267003222935,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,carbs,g,secondary_dish_level_averaging,6.994559480498593,28.19712440996897,0.1986834454050732,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,carbs,g,reference_frame_level,8.17938066174327,29.17904078632341,0.17067163843595545,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,fat,g,primary_single_frame_dish_balanced,7.368608882561959,46.0803072395046,0.08817502967414947,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,fat,g,secondary_dish_level_averaging,6.583278752586348,45.9054858793733,0.09508054353117912,20686,676
+ResNet18_finetune,ResNet18 fine-tuned,fat,g,reference_frame_level,7.472131130134384,47.08701044634382,0.08328769478100351,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),calories,kcal,primary_single_frame_dish_balanced,118.0103432369592,509.77215799560526,0.09469402952356021,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),calories,kcal,secondary_dish_level_averaging,105.33347059006944,506.7884056729521,0.10526072491597083,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),calories,kcal,reference_frame_level,118.55198677727725,520.0986833632442,0.09077590031293314,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),protein,g,primary_single_frame_dish_balanced,9.158157766522015,13.2519216622442,0.5263840496826468,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),protein,g,secondary_dish_level_averaging,8.115804514188946,12.186685414096027,0.5994656188591361,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),protein,g,reference_frame_level,9.244567347423384,13.376951320647636,0.5263588297472119,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),carbs,g,primary_single_frame_dish_balanced,9.79966365340329,29.3155673151294,0.13385404767510478,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),carbs,g,secondary_dish_level_averaging,8.877843831358604,28.98456952929519,0.1533026831672446,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),carbs,g,reference_frame_level,9.924317470673182,29.91088628708714,0.1285488263323582,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),fat,g,primary_single_frame_dish_balanced,9.37351141742687,46.961101973315145,0.052984019144100336,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),fat,g,secondary_dish_level_averaging,8.650873336789235,46.81869801750736,0.05871873764774571,20686,676
+MobileNetV2_baseline,MobileNetV2 baseline (frozen),fat,g,reference_frame_level,9.399731137596191,47.91787188655073,0.050651061351274174,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,calories,kcal,primary_single_frame_dish_balanced,91.48660465452846,487.63074883425946,0.17162815960650224,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,calories,kcal,secondary_dish_level_averaging,76.61067639654837,483.8755468273316,0.18433747285609048,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,calories,kcal,reference_frame_level,93.04512589632537,498.2891963211021,0.16543076331931206,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,protein,g,primary_single_frame_dish_balanced,6.57009484229024,10.622202867196657,0.6957029212329431,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,protein,g,secondary_dish_level_averaging,5.159434555489249,8.869596293407936,0.7878337471322306,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,protein,g,reference_frame_level,6.681457838681463,10.774134593452123,0.6927443021636528,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,carbs,g,primary_single_frame_dish_balanced,8.198062730301496,28.468114930161736,0.1832072109594327,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,carbs,g,secondary_dish_level_averaging,7.047919366950379,28.00630407174879,0.20949235648760767,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,carbs,g,reference_frame_level,8.323933052773377,29.06065810828406,0.1773873460059595,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,fat,g,primary_single_frame_dish_balanced,7.302077731559715,45.090362876737586,0.12693172000012332,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,fat,g,secondary_dish_level_averaging,6.337460719062544,44.8780273820225,0.13513510883733926,20686,676
+MobileNetV2_finetune,MobileNetV2 fine-tuned,fat,g,reference_frame_level,7.412796498525444,46.07665081650098,0.1222059496493686,20686,676
