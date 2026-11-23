@@ -1,0 +1,5 @@
+-r requirements.txt
+scipy>=1.15,<1.19
+opencv-python-headless>=4.10,<5.2
+segmentation-models-pytorch==0.6.0
+# Optional ONNX acceleration is listed in requirements-onnx.txt.

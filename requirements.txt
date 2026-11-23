@@ -1,0 +1,10 @@
+# Common environment for evaluation, figures and a future demo.
+# Keep a compatible torch/torchvision pair. Retain an existing compatible CUDA install.
+torch>=2.7,<2.16
+torchvision>=0.22,<0.30
+numpy>=2.2,<2.4
+pandas>=2.2,<3.1
+Pillow>=11.2,<14
+matplotlib>=3.10,<3.12
+PyYAML>=6,<7
+scikit-learn>=1.5,<2
