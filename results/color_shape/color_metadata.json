@@ -1,0 +1,19 @@
+{
+  "device": "cpu",
+  "backend": "PyTorch FP32 then ONNX Runtime FP32",
+  "threads": 4,
+  "test_frames": 20686,
+  "conditions": [
+    "Grayscale",
+    "Saturation_0.3"
+  ],
+  "saturation_factor": 0.3,
+  "grayscale": "PIL ImageOps.grayscale then RGB",
+  "preprocessing": "RGB resize 224x224 PIL bilinear, perturb, ImageNet normalization",
+  "original_source": "D supplied predictions; only 16-image original validation rerun",
+  "checkpoint_sha256": {
+    "CustomCNN": "6f5b2da11b8e47788ba4fae32ddc4c86200766b7b978a9977dc9ed347eeffe27",
+    "ResNet18_finetune": "4a605a4b036e655e64520007ad044bae10b0b205ba33b01f5461639b00389a5c",
+    "MobileNetV2_finetune": "ccdc4810511a554b00c1fbf11963c541c8c5e1406edb578ce4cbc9ff442f72f1"
+  }
+}

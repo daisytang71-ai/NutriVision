@@ -1,0 +1,29 @@
+[
+  {
+    "model": "CustomCNN",
+    "max_abs_difference": {
+      "calories": 8.024298767850269e-05,
+      "protein": 2.263128408230841e-05,
+      "carbs": 6.3190617538566585e-06,
+      "fat": 3.474442110018572e-06
+    }
+  },
+  {
+    "model": "ResNet18_finetune",
+    "max_abs_difference": {
+      "calories": 0.0002904031935031526,
+      "protein": 2.149971987819299e-05,
+      "carbs": 3.033149641851196e-05,
+      "fat": 3.1269978990167147e-05
+    }
+  },
+  {
+    "model": "MobileNetV2_finetune",
+    "max_abs_difference": {
+      "calories": 0.0008406408232985996,
+      "protein": 9.052513632923365e-05,
+      "carbs": 3.222721494466896e-05,
+      "fat": 7.397666325914543e-05
+    }
+  }
+]

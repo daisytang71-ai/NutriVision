@@ -1,0 +1,8 @@
+{
+  "sampled": 100,
+  "screened": 70,
+  "rejected": 30,
+  "selection": "Visual segmentation quality only, before inspecting prediction errors",
+  "ground_truth_masks": false,
+  "inference": "Exploratory associations only; no causal inference, no claim of verified segmentation accuracy; food type, viewpoint, framing and nutrition may confound shape-error associations."
+}

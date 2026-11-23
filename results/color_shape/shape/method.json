@@ -1,0 +1,13 @@
+{
+  "model": "mawiie/food-segmentation-mobilenet",
+  "source": "https://huggingface.co/mawiie/food-segmentation-mobilenet",
+  "dataset": "FoodSeg103 pretrained external segmentation model; not trained on NutriVision test data",
+  "sampling": "100 unique test dishes randomly selected with seed 42; lexicographically first frame per dish; pilot uses first 10",
+  "count": 100,
+  "input": "512x512 RGB, ImageNet normalization",
+  "mask": "argmax food class != 0; nearest resize to original image size; remove connected components under 25 pixels",
+  "limitations": "Automatic masks require visual review. Two dimensional visible food regions, not volume. Observational associations do not show causal dependence. Area and contour features reflect multiple ingredients and camera framing.",
+  "external_model_card_metric": "Author reports 23.33% multiclass validation mIoU on FoodSeg103, not a Nutrition5k foreground-mask accuracy estimate",
+  "source_download": "Same public checkpoint downloaded via hf-mirror.com because the primary host was unreachable",
+  "visual_qa": "All 100 masks visually screened; per-sample decisions and reasons are in shape_features_reviewed.csv"
+}

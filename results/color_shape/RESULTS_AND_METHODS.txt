@@ -1,0 +1,42 @@
+NutriVision Color and Food Shape Analysis
+
+COLOR
+All 676 test dishes / 20,686 frames. Three fixed checkpoints; no retraining. Original predictions are reused from D. A 16-image check reproduced each model before new inference.
+
+               model      condition      MAE  delta_MAE  delta_MAE_pct
+           CustomCNN       Original 103.6330     0.0000         0.0000
+           CustomCNN      Grayscale 168.2703    64.6373        62.3713
+           CustomCNN Saturation_0.3 131.0919    27.4589        26.4963
+   ResNet18_finetune       Original  89.4469     0.0000         0.0000
+   ResNet18_finetune      Grayscale 132.4135    42.9666        48.0359
+   ResNet18_finetune Saturation_0.3 113.8054    24.3585        27.2323
+MobileNetV2_finetune       Original  91.4866     0.0000         0.0000
+MobileNetV2_finetune      Grayscale 137.0022    45.5156        49.7511
+MobileNetV2_finetune Saturation_0.3 101.8336    10.3469        11.3098
+
+Primary evaluation: mean of per-dish mean frame absolute errors. Secondary evaluation: average frame predictions per dish before computing error. Calories use kcal; protein/carbs/fat use grams. Four-target, two-level results are in color_metrics.csv. Paired 95% bootstrap intervals resample whole dishes, 5,000 replicates with seed 42; these quantify dish-sampling uncertainty for these fixed models, not training variability.
+
+Grayscale: Pillow grayscale to three RGB channels. Reduced saturation: Pillow ImageEnhance.Color factor 0.3. Both are applied to bilinearly resized 224x224 RGB images before ImageNet normalization. Identical test frames, labels, checkpoints and target scalers across conditions. No prediction clipping.
+
+FOOD SHAPE
+Random sample: 100 distinct test dishes, seed 42, lexicographically first frame per dish. 70 masks passed visual screening; 30 were excluded for segmentation defects before examining errors. This analysis uses one selected frame per dish and is separate from the full-test color metrics.
+
+External food segmentation model: https://huggingface.co/mawiie/food-segmentation-mobilenet (DeepLabV3+ MobileNetV2, FoodSeg103). Input 512x512 and ImageNet normalization; union of non-background argmax classes restored to original image size; connected components smaller than 25 pixels removed. Masks were visually screened, not evaluated against human ground-truth masks.
+
+               model       feature  n  spearman_rho  partial_rank_rho_controlling_true_target
+           CustomCNN area_fraction 70        0.4830                                    0.0632
+           CustomCNN  aspect_ratio 70        0.0944                                   -0.0034
+           CustomCNN   circularity 70        0.0850                                    0.1628
+   ResNet18_finetune area_fraction 70        0.3960                                    0.0156
+   ResNet18_finetune  aspect_ratio 70       -0.0348                                   -0.1480
+   ResNet18_finetune   circularity 70       -0.1388                                   -0.1361
+MobileNetV2_finetune area_fraction 70        0.4410                                    0.1438
+MobileNetV2_finetune  aspect_ratio 70       -0.0123                                   -0.1048
+MobileNetV2_finetune   circularity 70       -0.0932                                   -0.0792
+
+Feature definitions: area fraction = food pixels / image pixels; aspect ratio = longer / shorter side of the minimum-area rectangle around all food contours; circularity = 4*pi*food pixel area / squared sum of external contour perimeters. Contour complexity is circularity inverse and is not a separate independent finding. Partial rank correlation controls for the true nutritional target, using residuals of ranked variables.
+
+INTERPRETATION LIMITS
+Color perturbations measure sensitivity under changed inputs, not proof of nutritional reasoning. Shape results are exploratory associations in approximate, visually screened 2D masks. Food class, viewpoint, framing, portion size and mask quality can confound results. Excluding poor masks creates selection bias, especially for pale/dark foods; correlations using all 100 automatic masks are included as a sensitivity check. No causal or population-wide conclusion is justified; reported p-values are unadjusted exploratory values. Full test labels, including extreme calories, are retained for color evaluation. Rotation and flip were not run in this color/food-shape analysis.
+
+Reproducibility metadata and checkpoint hashes: color_metadata.json. Shape selection and QA decisions: shape/shape_features_reviewed.csv. All per-frame new predictions are in predictions/. D source: https://github.com/daisytang71-ai/NutriVision
