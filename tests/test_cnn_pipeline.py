@@ -26,7 +26,7 @@ class CNNPipelineTests(unittest.TestCase):
             save()
             checkpoint={'train_mean':[20,2,3,4],'label_scaler':{'mean':[20,2,3,4],'std':[10,1,1,1]}}
             records=compatible_records(root/'manifest.csv',root,checkpoint,root)
-            self.assertEqual(records[0]['carbs'],2)
+            self.assertEqual(records[0]['carbohydrate'],2)
             self.assertEqual(len(records),4)
             checkpoint['train_mean'][0]=999
             with self.assertRaisesRegex(ValueError,'training means'):
