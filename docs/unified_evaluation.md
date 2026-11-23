@@ -66,21 +66,51 @@ Every frame receives an independent prediction. Errors are averaged within each 
 
 Every dish receives equal weight, regardless of its number of frames.
 
-For dish \(i\), let \(n_i\) denote its number of frames and \(e_{ij}\) the prediction error for frame \(j\). With \(D=676\):
+Let $D=676$ denote the number of test dishes. For dish $i$, let $n_i$ be its number of frames, $y_i$ its ground-truth value, and $e_{ij}=\hat{y}_{ij}-y_i$ the prediction error for frame $j$.
 
-```text
-MAE = (1/D) Σ_i [(1/n_i) Σ_j |e_ij|]
+$$
+\mathrm{MAE}
+=
+\frac{1}{D}
+\sum_{i=1}^{D}
+\left(
+\frac{1}{n_i}
+\sum_{j=1}^{n_i}|e_{ij}|
+\right)
+$$
 
-MSE = (1/D) Σ_i [(1/n_i) Σ_j e_ij²]
+$$
+\mathrm{MSE}
+=
+\frac{1}{D}
+\sum_{i=1}^{D}
+\left(
+\frac{1}{n_i}
+\sum_{j=1}^{n_i}e_{ij}^{2}
+\right)
+$$
 
-RMSE = √MSE
+$$
+\mathrm{RMSE}=\sqrt{\mathrm{MSE}}
+$$
 
-R² = 1 − MSE / Var_db(y)
-```
+$$
+R^{2}
+=
+1-\frac{\mathrm{MSE}}{\mathrm{Var}_{\mathrm{db}}(y)}
+$$
 
-`Var_db(y)` uses the same dish-balanced weighting.
+The dish-balanced variance is:
 
-Squared errors are aggregated before taking the square root. The calculation does not average individual dish RMSE values.
+$$
+\mathrm{Var}_{\mathrm{db}}(y)
+=
+\frac{1}{D}\sum_{i=1}^{D}(y_i-\bar{y})^{2},
+\qquad
+\bar{y}=\frac{1}{D}\sum_{i=1}^{D}y_i
+$$
+
+Squared errors are averaged within dishes and then across dishes before taking the square root. Individual dish RMSE values are not averaged.
 
 ### Secondary — Dish-level prediction averaging
 
