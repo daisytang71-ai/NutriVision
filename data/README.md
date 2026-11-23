@@ -105,12 +105,4 @@ data/manifests/full_frame_manifest.csv
 
 Set the image root to the local `side_frames_valid/` directory when running inference or training. See [data access and directory instructions](DOWNLOAD.md).
 
-## CNN Manifest Compatibility
-
-The repository manifest uses `carbohydrate`. The original CNN training manifest uses `carbs`.
-
-The unified evaluation script reads the repository manifest directly. CNN-only evaluation with this manifest uses the compatibility-aware entry point documented in [CNN testing](../docs/cnn_testing.md).
-
-That entry point checks the split assignments and training statistics and records both manifest hashes. The original training snapshot and checkpoint metadata remain unchanged.
-
 See [unified evaluation](../docs/unified_evaluation.md) for the complete evaluation workflow.
