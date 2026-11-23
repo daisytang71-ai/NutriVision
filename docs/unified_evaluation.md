@@ -1,99 +1,208 @@
-# Unified Six-Model Evaluation（统一六模型评估）
+# Unified Six-Model Evaluation
 
-负责人：evaluation 部分（2026-11-22）。本目录中的脚本在**完全相同**的 676 个 test dishes /
-20,686 个 test frames 上评估全部六个模型，并输出统一格式的预测 CSV，供指标复算
-（如汤远航的误差分析）直接使用。方案与老师建议完全对齐：
+The evaluation pipeline compares six models on the same **676 test dishes and 20,686 test frames**. It exports per-frame predictions in a common CSV format and computes metrics under explicitly separated evaluation protocols.
 
-1. **第一层（必须）**：六模型 Calorie MAE / RMSE / R² + 四种营养目标 MAE
-2. **第二层（必须）**：Primary = Single-frame dish-balanced；Secondary = Dish-level averaging；两者分开报告
-3. **第三层（推荐）**：Predicted vs. Actual、Error by Calorie Range、Best/Worst Cases
+The workflow contains three parts:
 
-Primary Metric 为 Calorie MAE（single-frame, dish-balanced 口径）；Protein / Carbs / Fat MAE
-为 Secondary Metrics。所有 checkpoint 均基于 Validation Set 选择（训练时 early stopping 监控
-验证集 dish-level Calorie MAE），未使用测试集信息做模型选择。
+1. **Model comparison:** calorie MAE, RMSE and R², together with MAE for all four nutritional targets.
+2. **Evaluation-level comparison:** single-frame, dish-balanced evaluation as the primary protocol, and dish-level prediction averaging as the secondary protocol.
+3. **Error analysis:** predicted versus actual values, errors by calorie range, and representative best and worst predictions.
 
-## 六个模型
+The primary metric is **calorie MAE under single-frame, dish-balanced evaluation**. Protein, carbohydrate and fat MAE are secondary metrics.
 
-| # | 模型 | Checkpoint（GitHub Releases） | 验证集 dish Calorie MAE |
-|---|---|---|---|
-| 1 | Mean predictor（非学习基线，训练集 dish 均值） | — | — |
-| 2 | Custom CNN | `cnn_best.pt` | （val 训练记录见 checkpoint） |
-| 3 | ResNet18 baseline（frozen backbone） | `Resnet_baseline.pt` | 91.38 kcal |
-| 4 | ResNet18 fine-tuned | `Resnet_finetune.pt` | 56.54 kcal |
-| 5 | MobileNetV2 baseline（frozen backbone） | `MobileNetV2_baseline.pt` | 88.58 kcal |
-| 6 | MobileNetV2 fine-tuned | `MobileNetV2_finetune.pt` | 59.33 kcal |
+All learned checkpoints were selected using validation data. Training monitored validation dish-level calorie MAE for checkpoint selection and early stopping. Test results were not used to select checkpoints.
 
-Mean predictor 来自仓库 README 的模型列表，用于补齐"六模型"比较并给出学习模型必须超越的下限。
+## Models and Checkpoints
 
-## 预测文件（predictions/unified/）
+| Model | Checkpoint filename | Validation dish-level calorie MAE |
+|---|---|---:|
+| Mean predictor | No checkpoint | Not applicable |
+| Custom CNN | `cnn_best.pt` | 81.92 kcal |
+| ResNet18 baseline, frozen backbone | `Resnet_baseline.pt` | 91.38 kcal |
+| ResNet18 fine-tuned | `Resnet_finetune.pt` | 56.54 kcal |
+| MobileNetV2 baseline, frozen backbone | `MobileNetV2_baseline.pt` | 88.58 kcal |
+| MobileNetV2 fine-tuned | `MobileNetV2_finetune.pt` | 59.33 kcal |
 
-每模型一份 UTF-8 CSV，列与老师要求的统一格式一致：
+The mean predictor returns the nutritional means of unique training dishes. It provides a non-learning reference for comparison with the five learned models.
+
+Model weights are stored separately from the source code. The project’s model download location is [GitHub Releases](https://github.com/daisytang71-ai/NutriVision/releases).
+
+## Prediction Files
+
+Prediction files are stored in `predictions/unified/`, with one UTF-8 CSV per model.
+
+Each file uses the following schema:
 
 ```text
 dish_id,frame_path,true_calories,pred_calories,true_protein,pred_protein,true_carbs,pred_carbs,true_fat,pred_fat
 ```
 
-每行一帧；frame_path 是相对 `side_frames_valid` 的路径（仅用于身份核对）。预测已恢复原单位
-（kcal / g），负预测未截断。`run_metadata.json` 记录每个 checkpoint 的 stage / epoch /
-验证集 MAE 与推理耗时。指标计算入口为 `src/evaluation/compute_unified_metrics.py`；
-如需旧版 `evaluate.py` 接口（`y_cal/pred_cal` 列名），把列重命名即可（true_cal→y_cal，
-pred_cal→pred_cal 等，target 列名 carbs→c 对应 carbohydrate）。
+Each row represents one frame.
 
-## 结果与图表（results/unified/）
+- `dish_id` identifies the dish.
+- `frame_path` is relative to `side_frames_valid/`.
+- Calories use kilocalories.
+- Protein, carbohydrates and fat use grams.
+- Predictions are restored to their original units before export.
+- Negative predictions are retained without clipping.
 
-- `metrics_all_levels.csv`：model × target × evaluation level 全量指标
-- `table1_six_model_calorie.csv`：六模型 Calorie MAE / RMSE / R²（PPT 用）
-- `table2_four_targets_MAE.csv`：四目标 MAE（PPT 用）
-- `table3_single_vs_dish.csv`：Single-frame vs Dish-level 对比（PPT 用）
-- `error_by_calorie_range.csv`、`robust_subset_metrics.csv`、`extreme_dishes_over_900kcal.csv`、
-  `best_worst_cases.csv`、`dish_predictions_error_analysis.csv`：误差分析
-- `summary.json`：口径定义、公式与关键结论
-- `figures/`：8 张可直接插入 PPT 的图（160 dpi，白底）
-- `REPORT.md`：完整评估报告（中文叙述 + 英文表格）
+The prediction CSV uses `true_carbs` and `pred_carbs` for the carbohydrate target. The input manifest uses `carbohydrate`.
 
-**重要发现**：测试集中 2 个 dish 的真实热量为 9,486 / 9,170 kcal（训练集标签最大约 1,300 kcal），
-它们的平方误差主导了所有模型的 RMSE 与 R²（包括均值基线）。解读 RMSE / R² 时请结合
-`robust_subset_metrics.csv`（true < 900 kcal 的 665 dish 子集，R² 0.63–0.85）。
+`run_metadata.json` records model metadata and inference times.
 
-## 复现步骤
+The reported evaluation metrics are calculated by:
 
-需要 Python 3.11+、PyTorch、torchvision、pandas、numpy、scikit-learn（不需要 GPU；CPU 约 35 分钟）。
+```text
+src/evaluation/compute_unified_metrics.py
+```
 
-图片数据与 checkpoint 不入 Git：图片为 Nutrition5k 侧视图帧（本地目录 `side_frames_valid`，
-由负责人同步给需要的成员），checkpoint 从 [GitHub Releases](https://github.com/daisytang71-ai/NutriVision/releases) 下载。
-所有路径通过命令行参数或 `NV_*` 环境变量提供，脚本内不含本机绝对路径。
+The older `evaluate.py` interface uses different column names and frame-equal scoring. Use `compute_unified_metrics.py` to reproduce the reported primary and secondary results.
+
+## Evaluation Protocols
+
+### Primary — Single-frame, dish-balanced evaluation
+
+Every frame receives an independent prediction. Errors are averaged within each dish and then across the 676 dishes.
+
+Every dish receives equal weight, regardless of its number of frames.
+
+For dish \(i\), let \(n_i\) denote its number of frames and \(e_{ij}\) the prediction error for frame \(j\). With \(D=676\):
+
+```text
+MAE = (1/D) Σ_i [(1/n_i) Σ_j |e_ij|]
+
+MSE = (1/D) Σ_i [(1/n_i) Σ_j e_ij²]
+
+RMSE = √MSE
+
+R² = 1 − MSE / Var_db(y)
+```
+
+`Var_db(y)` uses the same dish-balanced weighting.
+
+Squared errors are aggregated before taking the square root. The calculation does not average individual dish RMSE values.
+
+### Secondary — Dish-level prediction averaging
+
+Predictions from all frames of each dish are averaged first. MAE, RMSE and R² are then calculated over the 676 dish-level predictions.
+
+This protocol measures the benefit of combining multiple views of the same dish.
+
+### Reference — Frame-level evaluation
+
+All 20,686 frames receive equal weight. Dishes with more frames therefore contribute more heavily.
+
+This protocol serves as a supplementary reference. It is reported separately from the primary and secondary protocols.
+
+## Results and Figures
+
+Evaluation outputs are stored in `results/unified/`.
+
+| File | Contents |
+|---|---|
+| `metrics_all_levels.csv` | Complete metrics by model, target and evaluation level |
+| `table1_six_model_calorie.csv` | Primary calorie MAE, RMSE and R² for six models |
+| `table1b_all_targets_all_metrics.csv` | Primary metrics for all four targets |
+| `table2_four_targets_MAE.csv` | Primary MAE for calories, protein, carbohydrates and fat |
+| `table3_single_vs_dish.csv` | Single-frame and dish-level comparison |
+| `error_by_calorie_range.csv` | Errors grouped by true calorie range |
+| `robust_subset_metrics.csv` | Full-test and supplementary subset metrics |
+| `extreme_dishes_over_900kcal.csv` | Test dishes with true calories of at least 900 kcal |
+| `best_worst_cases.csv` | Representative predictions with small and large errors |
+| `dish_predictions_error_analysis.csv` | Dish-level predictions used for error analysis |
+| `summary.json` | Evaluation definitions and summary results |
+| `figures/` | Eight evaluation figures |
+| `REPORT.md` | Evaluation report |
+
+### Extreme Calorie Labels
+
+Two original dataset labels are approximately **9,486 and 9,170 kcal**. Their squared errors strongly affect full-test RMSE and R².
+
+The complete 676-dish test results are retained. Supplementary analysis also reports results for the **665 dishes with true calories below 900 kcal**.
+
+This subset excludes all 11 dishes with labels of at least 900 kcal, including the two extreme cases. It does not replace the full-test evaluation.
+
+The learned models achieve dish-level R² values of approximately **0.63–0.85** on this supplementary subset. These values belong to the secondary, dish-level prediction-averaging protocol.
+
+## Reproduction
+
+Run commands from the repository root.
+
+The evaluation environment requires Python, PyTorch, torchvision, NumPy, pandas, Pillow, Matplotlib and scikit-learn. The metric script requires **pandas 2.2 or later**. The unified inference script runs on CPU.
+
+The image directory and checkpoints are stored outside Git:
+
+```text
+/path/to/side_frames_valid/
+/path/to/checkpoints/
+```
+
+### 1. Generate Predictions
+
+Set the paths to the prepared manifest, image directory and checkpoint directory.
+
+For macOS or Linux:
+
+```bash
+export NV_MANIFEST="data/manifests/full_frame_manifest.csv"
+export NV_DATA_ROOT="/path/to/side_frames_valid"
+export NV_MODELS_DIR="/path/to/checkpoints"
+export NV_IMG_ROOT="$NV_DATA_ROOT"
+
+python src/evaluation/run_unified_evaluation.py
+```
+
+For Windows PowerShell:
 
 ```powershell
-# 1) 推理：6 个模型 -> predictions/unified/*.csv（把 PATH/TO 换成本机实际路径）
-python src/evaluation/run_unified_evaluation.py \
-  --manifest data/manifests/full_frame_manifest.csv \
-  --data-root PATH/TO/side_frames_valid \
-  --models-dir PATH/TO/checkpoints
+$env:NV_MANIFEST="data/manifests/full_frame_manifest.csv"
+$env:NV_DATA_ROOT="D:/Nutrition5k/side_frames_valid"
+$env:NV_MODELS_DIR="D:/Nutrition5k/checkpoints"
+$env:NV_IMG_ROOT=$env:NV_DATA_ROOT
 
-# 2) 三层指标 -> results/unified/*.csv + summary.json
+python src/evaluation/run_unified_evaluation.py
+```
+
+The default output directory is `predictions/unified/`.
+
+This step regenerates model predictions. The repository already includes prediction CSVs, so metric and figure reproduction can begin at Step 2 without repeating inference.
+
+### 2. Compute Metrics
+
+```bash
 python src/evaluation/compute_unified_metrics.py
+```
 
-# 3) 图表 -> results/unified/figures/*.png
+This command generates the evaluation tables, supplementary analyses and `summary.json`.
+
+### 3. Generate Figures
+
+```bash
 python src/evaluation/make_unified_figures.py
+```
 
-# 4) 报告 -> results/unified/REPORT.md
+This command writes figures to `results/unified/figures/`. Food-image case illustrations use the image directory specified by `NV_IMG_ROOT`.
+
+### 4. Generate the Report
+
+```bash
 python src/evaluation/generate_unified_report.py
 ```
 
-可用环境变量（与命令行参数等价）：`NV_REPO_ROOT`、`NV_MANIFEST`、`NV_DATA_ROOT`、
-`NV_MODELS_DIR`、`NV_OUT_DIR`、`NV_PRED_DIR`、`NV_RES_DIR`、`NV_FIG_DIR`、`NV_IMG_ROOT`。
+This command writes `results/unified/REPORT.md`.
 
-### 口径公式
+## Environment Variables
 
-```text
-Single-frame, dish-balanced（D = 676 dishes，n_i = dish i 的帧数）：
-  MAE  = (1/D) Σ_i (1/n_i) Σ_j |e_ij|
-  MSE  = (1/D) Σ_i (1/n_i) Σ_j e_ij²        RMSE = √MSE
-  R²   = 1 − MSE / Var_db(y)（Var_db 使用同一 dish-balanced 权重）
-  平方误差先在每个 dish 内汇总，再对 676 道菜总体计算；不把各 dish 的 RMSE 简单平均。
+| Variable | Purpose |
+|---|---|
+| `NV_REPO_ROOT` | Repository root |
+| `NV_MANIFEST` | Input manifest CSV |
+| `NV_DATA_ROOT` | Prepared image root for inference |
+| `NV_MODELS_DIR` | Checkpoint directory |
+| `NV_OUT_DIR` | Prediction output directory |
+| `NV_PRED_DIR` | Prediction input directory for metric calculation |
+| `NV_RES_DIR` | Metric and report output directory |
+| `NV_FIG_DIR` | Figure output directory |
+| `NV_IMG_ROOT` | Image directory for visual case analysis |
 
-Dish-level averaging：
-  先对每道菜所有帧预测取平均 p̄_i，再对 676 个 (y_i, p̄_i) 计算 MAE / RMSE / R²。
-
-Frame-level（全部帧等权）仅作为对照列出，因为它会给帧数多的菜更高权重。
-```
+To preserve committed results during a new reproduction run, direct outputs to a separate directory. Keep the prediction and result paths consistent across all four steps.
